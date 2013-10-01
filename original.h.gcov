@@ -1,0 +1,92 @@
+        -:    0:Source:original.h
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#ifndef ORIGINAL_H_INCLUDED
+        -:    2:#define ORIGINAL_H_INCLUDED
+     5280:    3:int maxsumline(int *p,int size)
+        -:    4:{
+        -:    5:    int i;
+        -:    6:    int sum,ans;
+     5280:    7:    sum=0;
+     5280:    8:    ans=-1000000;
+   174240:    9:    for(i=0;i<size;i++)
+        -:   10:    {
+   168960:   11:        if(sum<0)
+     1863:   12:            sum=0;
+   168960:   13:        sum+=p[i];
+   168960:   14:        if(ans<sum)
+   108006:   15:            ans=sum;
+        -:   16:    }
+     5280:   17:    return ans;
+        -:   18:}
+    #####:   19:int maxsumcycle(int *p,int size)
+        -:   20:{
+        -:   21:    int i;
+        -:   22:    int sum,ans;
+    #####:   23:    sum=0;
+    #####:   24:    ans=maxsumline(p,size);
+    #####:   25:    for (i=0;i<size;i++)
+        -:   26:    {
+    #####:   27:        sum+=p[i];
+    #####:   28:        p[i] = -p[i];
+        -:   29:    }
+    #####:   30:    if ((sum+maxsumline(p,size))>ans)
+        -:   31:    {
+    #####:   32:        return (sum+maxsumline(p,size));
+        -:   33:    }
+    #####:   34:    else return ans;
+        -:   35:}
+       10:   36:int maxsumblock(int a[],int n,int m,int cycle,int expand)
+        -:   37:{
+       10:   38:    int i,j,k,tmp,totalmax=0,start;
+        -:   39:    int sum[32][32];
+        -:   40:    int t[32];
+      330:   41:    for (i=0;i<n;i++)
+        -:   42:    {
+    10560:   43:        for (j=0;j<m;j++)
+        -:   44:        {
+    10240:   45:            if (i!=0)
+        -:   46:            {
+     9920:   47:                sum[i][j]=sum[i-1][j]+a[i*m+j];
+        -:   48:            }
+        -:   49:            else
+        -:   50:            {
+      320:   51:                sum[i][j]=a[i*m+j];
+        -:   52:            }
+        -:   53:        }
+        -:   54:    }
+      330:   55:    for (i=0;i<n;i++)
+        -:   56:    {
+     5600:   57:        for (j=0;j<=i;j++)
+        -:   58:        {
+   174240:   59:            for (k=0;k<m;k++)
+        -:   60:            {
+   168960:   61:                t[k] = (j==0)?0:-sum[j-1][k];
+   168960:   62:                t[k] +=sum[i][k];
+        -:   63:            }
+     5280:   64:            tmp = cycle?maxsumcycle(t,m):maxsumline(t,m);
+     5280:   65:            if (tmp>totalmax)
+        -:   66:            {
+      318:   67:                totalmax= tmp;
+        -:   68:            }
+     5280:   69:            if (expand)
+        -:   70:            {
+    #####:   71:                for (k=0;k<m;k++)
+        -:   72:                {
+    #####:   73:                    t[k]=sum[n-1][k]-sum[i][k]+sum[j][k];
+        -:   74:                   // printf("%d ",t[k]);
+        -:   75:                }
+        -:   76:                //printf("\n");
+    #####:   77:                tmp = cycle?maxsumcycle(t,m):maxsumline(t,m);
+    #####:   78:                if (tmp>totalmax)
+        -:   79:                {
+    #####:   80:                    totalmax= tmp;
+        -:   81:                }
+        -:   82:            }
+        -:   83:        }
+        -:   84:    }
+       10:   85:    return totalmax;
+        -:   86:}
+        -:   87:#endif // ORIGINAL_H_INCLUDED

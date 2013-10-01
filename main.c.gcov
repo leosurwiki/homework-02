@@ -1,0 +1,54 @@
+        -:    0:Source:main.c
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "original.h"
+        -:    2:#include <stdio.h>
+        -:    3:int m,n,a[1024];
+       10:    4:void init(int p)
+        -:    5:{
+        -:    6:    int i,j;
+        -:    7:    FILE * fin;
+        -:    8:    char t[10];
+       10:    9:    t[0]=p+48;
+       10:   10:    t[1]=0;
+       10:   11:    strcat(t,"input.txt");
+       10:   12:    fin = fopen(t,"r");
+       10:   13:    fscanf(fin,"%d%d",&n,&m);
+      330:   14:    for (i=0;i<n;i++)
+        -:   15:    {
+    10560:   16:        for (j=0;j<m;j++)
+        -:   17:        {
+    10240:   18:            fscanf(fin,"%d",&a[i*m+j]);
+        -:   19:        }
+        -:   20:    }
+       10:   21:}
+        1:   22:int main(int argc,char * argv[])
+        -:   23:{
+        1:   24:    int i,p,j,cycle=0,expand=0,amorphous=0;
+        1:   25:    for (i=1;i<argc;i++)
+        -:   26:    {
+    #####:   27:        printf("%s\n",argv[i]);
+    #####:   28:        if (argv[i][1]=='v')
+        -:   29:        {
+    #####:   30:            expand=1;
+        -:   31:        }
+    #####:   32:        if (argv[i][1]=='h')
+        -:   33:        {
+    #####:   34:            cycle=1;
+        -:   35:        }
+    #####:   36:        if (argv[i][1]='a')
+        -:   37:        {
+    #####:   38:            amorphous=1;
+        -:   39:        }
+        -:   40:    }
+        1:   41:    printf("%d\n",expand);
+       11:   42:    for (p=0;p<10;p++)
+        -:   43:    {
+        -:   44:
+       10:   45:        init(p);
+       10:   46:        printf("%d\n",maxsumblock(a,n,m,cycle,expand));
+        -:   47:    }
+        1:   48:    return 0;
+        -:   49:}
